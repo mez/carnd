@@ -207,6 +207,6 @@ This project includes the following files:
 
 1. [SqueezeNet](https://arxiv.org/abs/1602.07360)
 2. [Deep Compression](https://arxiv.org/abs/1510.00149)
-3. [Vivek Yadav](https://chatbotslife.com/learning-human-driving-behavior-using-nvidias-neural-network-model-and-image-augmentation-80399360efee#.zbkgfcnoz)
+3. [Vivek Yadav's Learning human driving behavior using NVIDIA’s neural network model and image augmentation.](https://chatbotslife.com/learning-human-driving-behavior-using-nvidias-neural-network-model-and-image-augmentation-80399360efee#.zbkgfcnoz)
 4. [xslittlegrass' Self-driving car in a simulator with a tiny neural network](https://medium.com/@xslittlegrass/self-driving-car-in-a-simulator-with-a-tiny-neural-network-13d33b871234#.x1kdv5hgt)
 5. [Comma.ai steering model](https://github.com/commaai/research/blob/master/train_steering_model.py)
