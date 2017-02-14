@@ -21,6 +21,7 @@ The [Udacity Simulator](https://github.com/udacity/self-driving-car-sim) which i
 </div>
 
 The goals of this project are:
+
 1. Use the simulator to collect data of good driving behavior.
 2. Construct a convolution neural network in [Keras](https://keras.io/) that predicts steering angles from images.
 3. Train and validate the model with a training and validation set.
@@ -51,6 +52,7 @@ Let's take a look at another angle, pun intended, of the steering data.
 This histogram is the making of sampling nightmares; this is how alternate facts are created! Unbalanced data sampling would train our model to be very biased so we will clean this up.
 
 ## Clean up steps:
+
 1. Downsample the over represented examples
 2. Upsample the under represented examples
 3. Expose more varied examples to try and represent a uniform distribution.
@@ -128,6 +130,7 @@ This model combats overfitting by being super tiny and for kicks I added a small
 # Training Strategy
 
 To get the model to drive in the simulator, you need:
+
 1. Show the model how to drive straight
 2. How to recover if it drifts of track
 3. How to handle turns
