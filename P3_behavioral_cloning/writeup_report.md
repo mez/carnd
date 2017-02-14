@@ -132,7 +132,7 @@ This model combats overfitting by being super tiny and for kicks I added a small
 To get the model to drive in the simulator, you need:
 
 1. Show the model how to drive straight
-2. How to recover if it drifts of track
+2. How to recover if it drifts off track
 3. How to handle turns
 
 The Udacity slack community was a huge help here; from their experience, I used the left and right camera images and adjusted the steering (+.25 for left, -.25 for right) angles to show the model how to correct steering back to center. Then I used the horizontal shifting to capture more angles. This was enough to get a stable model working on the fastest setting (means lowest resolution) on both tracks.
