@@ -1,7 +1,7 @@
 
 # Behavioral Cloning Project
 
-This project features a 52 parameter squeezenet variant model that can drive around the Udacity car simulator! Check out writeup_report file for a detailed report on this project.
+This project features a 52 parameter squeezenet variant model that can drive around the Udacity car simulator! Check out [writeup_report](https://github.com/mez/carnd/blob/master/P3_behavioral_cloning/writeup_report.md) file for a detailed report on this project.
 
 ## The following files are included:
 
