@@ -160,13 +160,13 @@ Reducing input image size was the next challenge. We do this by first cropping t
 
 I used Keras to do a validation split on 30% of the data and my custom early termination to stop the training when we we reach a validation loss of around 0.03!
 
-This model was tiny (52 params!) and with only ~20k images I was able to train it on a 2012 Macbook air. An epoch was about six seconds. The memory requirement were small so I removed my generator and just loaded the entire dataset!
-
 <div align="left">
   </br>
   <img src="./images/loss_plot.png"><br><br>
 </div>
 **Note: this loss plot is from a previous run without early termination**
+
+This model was tiny (52 params!) and with only ~20k images I was able to train it on a 2012 Macbook air. An epoch was about six seconds. The memory requirement were small so I removed my generator and just loaded the entire dataset!
 
 <div align="left">
   <br>
