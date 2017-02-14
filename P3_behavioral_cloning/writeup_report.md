@@ -1,5 +1,5 @@
 
-# Behavioral Cloning Project
+# Behavioral Cloning Project: 52 parameter SqueezeNet!
 
 ## Introduction
 
