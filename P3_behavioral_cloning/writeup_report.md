@@ -29,7 +29,7 @@ The goals of this project are:
 
 # Data Exploration
 
-If you think the Lewis and Clark expediation was tough, try exploring an unknown dataset. I am being dramatic. When you are explroing data; you want to keep thinking, what is the least amount of data you can sample which will represent your problem (population if you like stats). For this problem we will be using the provided udacity dataset. Let's dive in!
+If you think the Lewis and Clark expedition was tough, try exploring an unknown dataset. I am being dramatic. When you are exploring data; you want to keep thinking, what is the least amount of data you can sample which will represent your problem (population if you like stats). For this problem we will be using the provided Udacity dataset. Let's dive in!
 
 Our goal is steering angle prediction, so let's take a look at what the dataset shows us! The plot below shows a few take aways:
 
@@ -66,7 +66,7 @@ Steering angle zero is over represented, so drop 90% of the examples. Easy!
 
 ### 2. Upsample
 
-Time to augment so we can start upsampling under represented examples. We start by fliping 40% of the examples that are not zero steering angle. So far so good!
+Time to augment so we can start upsampling under represented examples. We start by flipping 40% of the examples that are not zero steering angle. So far so good!
 <div align="center">
    <br>
   <img src="./images/data4.png"><br><br>
@@ -74,7 +74,7 @@ Time to augment so we can start upsampling under represented examples. We start 
 
 ### 3. Expose more varied examples
 
-Varity is the spice of life; this is also true to training a well generalized model. For this problem we will introduce more steering angles by shifting the examples horizontally and adding or subtracting the approriate angles corresponding to the shift we performed. There was no magic shift amount, you get this by experimenting. The result is below:
+Variety is the spice of life; this is also true to training a well generalized model. For this problem we will introduce more steering angles by shifting the examples horizontally and adding or subtracting the appropriate angles corresponding to the shift we performed. There was no magic shift amount, you get this by experimenting. The result is below:
 <div align="center">
    <br>
   <img src="./images/data5.png"><br><br>
@@ -97,14 +97,14 @@ How did I know 400 examples was enough? I simply kept reducing the number until 
 
 ### Main goals for us to think about while creating a model
 1. Is it efficient for the task at hand?
-2. If this was to be downloaded onto hardware in a car what would the power consumption and usuability be like?
+2. If this was to be downloaded onto hardware in a car what would the power consumption and usability be like?
     * There is an interesting paper called [Deep Compression](https://arxiv.org/abs/1510.00149), which we don't implement here but it is food for thought and shows that model can be tiny and still work!
 
-I started with a modified comma.ai model and I had a successful model, but it needed 300,000 trainable parameters. Reading the Deep compression paper and a blog post titled [Self-driving car in a simulator with a tiny neural network](https://medium.com/@xslittlegrass/self-driving-car-in-a-simulator-with-a-tiny-neural-network-13d33b871234#.x1kdv5hgt) I quickly realized that we can do better. The blog post linked shows a 63 parameter model that uses tiny images and a small network to get a stable model. I wanted to experiment and see if I could make it smaller and still stable. The solution developed over a number of experiments is a modified [SqueezeNet](https://arxiv.org/abs/1602.07360) implementation. With a squeeze net you get three addtional hyperparameters that are used to generate the fire module:
+I started with a modified comma.ai model and I had a successful model, but it needed 300,000 trainable parameters. Reading the Deep compression paper and a blog post titled [Self-driving car in a simulator with a tiny neural network](https://medium.com/@xslittlegrass/self-driving-car-in-a-simulator-with-a-tiny-neural-network-13d33b871234#.x1kdv5hgt) I quickly realized that we can do better. The blog post linked shows a 63 parameter model that uses tiny images and a small network to get a stable model. I wanted to experiment and see if I could make it smaller and still stable. The solution developed over a number of experiments is a modified [SqueezeNet](https://arxiv.org/abs/1602.07360) implementation. With a squeeze net you get three additional hyperparameters that are used to generate the fire module:
 
-1. S1x1: Number of 1x1 kernals to use in the squeeze layer within the fire module
-2. E1x1: Number of 1x1 kernals to use in the expand layer within the fire module
-3. E3x3: Number of 3x3 kernals to use in the expand layer within the fire module
+1. S1x1: Number of 1x1 kernels to use in the squeeze layer within the fire module
+2. E1x1: Number of 1x1 kernels to use in the expand layer within the fire module
+3. E3x3: Number of 3x3 kernels to use in the expand layer within the fire module
 
 #### Fire Module Zoomed In
 
@@ -112,7 +112,7 @@ I started with a modified comma.ai model and I had a successful model, but it ne
   <img src="./images/fire_module.png"><br><br>
 </div>
 
-The fire module is the workhorse of squeezenet. Sqeezenet as described in the paper is around 700k trainable parameters. I went through a process, where I kept reducing the number of parameters while all other variables were kept constant. You get the theme here? We are at the frontier and this calls for empircal testing. Through some experiments I went from 10k paramters to 1005, then 329, then 159, then ** 63 ** and finally ** 52 **!!
+The fire module is the workhorse of squeezenet. Sqeezenet as described in the paper is around 700k trainable parameters. I went through a process, where I kept reducing the number of parameters while all other variables were kept constant. You get the theme here? We are at the frontier and this calls for empirical testing. Through some experiments I went from 10k parameters to 1005, then 329, then 159, then ** 63 ** and finally ** 52 **!!
 
 ## The final 52 parameter squeezenet variant Model!!
 
@@ -121,7 +121,7 @@ The fire module is the workhorse of squeezenet. Sqeezenet as described in the pa
   <img src="./images/SqueezeNet52.png"><br><br>
 </div>
 
-This model combats overfitting by being super tiny and for kicks I added a small dropout layer. The model works on both tracks and has a six second epoch on my late 2012 macbook air!! From the comma.ai model, it was evident that a validation loss of around 0.03 on 30% of **this** dataset results in a stable model that can handle the track at a throttle of around 0.2, which is a speed of around 20mph in the simulator. So, I didn't bother worrying about the hyperparameter on how many epochs to train. I simply created a custom early termination keras callback that stopped the training when we hit our requirement.
+This model combats overfitting by being super tiny and for kicks I added a small dropout layer. The model works on both tracks and has a six second epoch on my late 2012 Macbook air!! From the comma.ai model, it was evident that a validation loss of around 0.03 on 30% of **this** dataset results in a stable model that can handle the track at a throttle of around 0.2, which is a speed of around 20mph in the simulator. So, I didn't bother worrying about the epoch hyperparameter. I simply created a custom early termination Keras callback that stopped the training when we hit our requirement.
 
 >One good rule of thumb I developed from this project is ** to try and reduce the number of variables you are tuning to gain better results faster.**
 
@@ -132,7 +132,7 @@ To get the model to drive in the simulator, you need:
 2. How to recover if it drifts of track
 3. How to handle turns
 
-The udacity slack community was a huge help here; from their experience, I used the left and right camera images and adjusted the steering (+.25 for left, -.25 for right) angles to show the model how to correct steering back to center. Then I used the horizontal shfiting to capture more angles. This was enough to get a stable model working on the fastest setting (means lowest resolution) on both tracks.
+The Udacity slack community was a huge help here; from their experience, I used the left and right camera images and adjusted the steering (+.25 for left, -.25 for right) angles to show the model how to correct steering back to center. Then I used the horizontal shifting to capture more angles. This was enough to get a stable model working on the fastest setting (means lowest resolution) on both tracks.
 
 Reducing input image size was the next challenge. We do this by first cropping the top and bottom from the image that would be noise to the model. Then we resize the image to (64,64) and convert to HSV and only returning the S channel. This takes us from (160,320,3) to (64, 64, 1)!!
 
@@ -155,9 +155,9 @@ Reducing input image size was the next challenge. We do this by first cropping t
 * Batch size: 128 (tried 64, 128, 256, 1024)
 * Adam optimizer
 
-I used keras to do a validation split on 30% of the data and my custom early termination to stop the training when we we reach a validation loss of around 0.03!
+I used Keras to do a validation split on 30% of the data and my custom early termination to stop the training when we we reach a validation loss of around 0.03!
 
-This model was tiny (52 params!) and we are training it on a 2012 macbook air.
+This model was tiny (52 params!) and we are training it on a 2012 Macbook air.
 ** Note: this is from a previous run without early termination **
 
 <div align="left">
@@ -174,10 +174,10 @@ This model was tiny (52 params!) and we are training it on a 2012 macbook air.
 </div>
 
 # Pros
-1. Can training on my macbook air.
+1. Can training on my Macbook air.
 2. Enough to pass the challenge.
 3. Smaller model meant I could experiment with more variables and different models to gain better intuition.
-4. Learned that our current method of training with back prop is not efficient and that we can achieve alot with smaller network.
+4. Learned that our current method of training with back prop is not efficient and that we can achieve a lot with a smaller network.
 5. Get to use aggressive learning rate for faster convergence :D
 
 # Cons
@@ -196,9 +196,4 @@ This project includes the following files:
 2. drive.py for driving the car in autonomous mode
 3. model.h5 containing a trained convolution neural network
 4. writeup_report.md summarizing the results
-5. other helper files neeeded by model.py and drive.py
-
-
-```python
-
-```
+5. other helper files needed by model.py and drive.py
