@@ -7,17 +7,17 @@ What a time to be alive! The year is 2017, Donald Trump is president of the Unit
 
 ## The Controlled Environment
 
-<div align="center"> 
+<div align="center">
    <br>
-  <img src="./sim_image.png"><br><br>
+  <img src="./images/sim_image.png"><br><br>
 </div>
 
-The [Udacity Simulator](https://github.com/udacity/self-driving-car-sim) which is open sourced will be our controlled environment for this journey. It has two modes, training and autonomous mode. Training mode is for the human to drive and record/collect the driving. The result would be a directory of images from three cameras (left, center, right) and a driver log CSV file that records the image along with steering angle, speed etc. Autonomous mode requires a model that can send the simulator steering angle predictions. 
+The [Udacity Simulator](https://github.com/udacity/self-driving-car-sim) which is open sourced will be our controlled environment for this journey. It has two modes, training and autonomous mode. Training mode is for the human to drive and record/collect the driving. The result would be a directory of images from three cameras (left, center, right) and a driver log CSV file that records the image along with steering angle, speed etc. Autonomous mode requires a model that can send the simulator steering angle predictions.
 
 
-<div align="center"> 
+<div align="center">
    <br>
-  <img src="./driver_log.png"><br><br>
+  <img src="./images/driver_log.png"><br><br>
 </div>
 
 The goals of this project are:
@@ -36,16 +36,16 @@ Our goal is steering angle prediction, so let's take a look at what the dataset 
 1. Range is [-1,1]
 2. Clustering around [-0.5, 0.5]
 
-<div align="center"> 
+<div align="center">
    <br>
-  <img src="./data1.png"><br><br>
+  <img src="./images/data1.png"><br><br>
 </div>
 
 Let's take a look at another angle, pun intended, of the steering data.
 
-<div align="center"> 
+<div align="center">
    <br>
-  <img src="./data2.png"><br><br>
+  <img src="./images/data2.png"><br><br>
 </div>
 
 This histogram is the making of sampling nightmares; this is how alternate facts are created! Unbalanced data sampling would train our model to be very biased so we will clean this up.
@@ -59,25 +59,25 @@ This histogram is the making of sampling nightmares; this is how alternate facts
 
 Steering angle zero is over represented, so drop 90% of the examples. Easy!
 
-<div align="center"> 
+<div align="center">
    <br>
-  <img src="./data3v2.png"><br><br>
+  <img src="./images/data3v2.png"><br><br>
 </div>
 
 ### 2. Upsample
 
 Time to augment so we can start upsampling under represented examples. We start by fliping 40% of the examples that are not zero steering angle. So far so good!
-<div align="center"> 
+<div align="center">
    <br>
-  <img src="./data4.png"><br><br>
+  <img src="./images/data4.png"><br><br>
 </div>
 
 ### 3. Expose more varied examples
 
 Varity is the spice of life; this is also true to training a well generalized model. For this problem we will introduce more steering angles by shifting the examples horizontally and adding or subtracting the approriate angles corresponding to the shift we performed. There was no magic shift amount, you get this by experimenting. The result is below:
-<div align="center"> 
+<div align="center">
    <br>
-  <img src="./data5.png"><br><br>
+  <img src="./images/data5.png"><br><br>
 </div>
 
 Great our dataset/sample is looking better. Next, let's trim this to look more uniform. This was accomplished by:
@@ -86,9 +86,9 @@ Great our dataset/sample is looking better. Next, let's trim this to look more u
 2. Finding bins that have more than 400 examples.
 3. Randomly sample and drop examples so we have no more than 400 examples.
 
-<div align="center"> 
+<div align="center">
    <br>
-  <img src="./data6v2.png"><br><br>
+  <img src="./images/data6v2.png"><br><br>
 </div>
 
 How did I know 400 examples was enough? I simply kept reducing the number until I had reached a point where my model can still produced stable results. Below 400 my model started getting unstable results.
@@ -109,21 +109,21 @@ I started with a modified comma.ai model and I had a successful model, but it ne
 #### Fire Module Zoomed In
 
 <div align="center">
-  <img src="./fire_module.png"><br><br>
+  <img src="./images/fire_module.png"><br><br>
 </div>
 
-The fire module is the workhorse of squeezenet. Sqeezenet as described in the paper is around 700k trainable parameters. I went through a process, where I kept reducing the number of parameters while all other variables were kept constant. You get the theme here? We are at the frontier and this calls for empircal testing. Through some experiments I went from 10k paramters to 1005, then 329, then 159, then ** 63 ** and finally ** 52 **!! 
+The fire module is the workhorse of squeezenet. Sqeezenet as described in the paper is around 700k trainable parameters. I went through a process, where I kept reducing the number of parameters while all other variables were kept constant. You get the theme here? We are at the frontier and this calls for empircal testing. Through some experiments I went from 10k paramters to 1005, then 329, then 159, then ** 63 ** and finally ** 52 **!!
 
 ## The final 52 parameter squeezenet variant Model!!
 
 <div align="left">
   <br>
-  <img src="./SqueezeNet52.png"><br><br>
+  <img src="./images/SqueezeNet52.png"><br><br>
 </div>
 
 This model combats overfitting by being super tiny and for kicks I added a small dropout layer. The model works on both tracks and has a six second epoch on my late 2012 macbook air!! From the comma.ai model, it was evident that a validation loss of around 0.03 on 30% of **this** dataset results in a stable model that can handle the track at a throttle of around 0.2, which is a speed of around 20mph in the simulator. So, I didn't bother worrying about the hyperparameter on how many epochs to train. I simply created a custom early termination keras callback that stopped the training when we hit our requirement.
 
->One good rule of thumb I developed from this project is ** to try and reduce the number of variables you are tuning to gain better results faster.** 
+>One good rule of thumb I developed from this project is ** to try and reduce the number of variables you are tuning to gain better results faster.**
 
 # Training Strategy
 
@@ -132,20 +132,20 @@ To get the model to drive in the simulator, you need:
 2. How to recover if it drifts of track
 3. How to handle turns
 
-The udacity slack community was a huge help here; from their experience, I used the left and right camera images and adjusted the steering (+.25 for left, -.25 for right) angles to show the model how to correct steering back to center. Then I used the horizontal shfiting to capture more angles. This was enough to get a stable model working on the fastest setting (means lowest resolution) on both tracks. 
+The udacity slack community was a huge help here; from their experience, I used the left and right camera images and adjusted the steering (+.25 for left, -.25 for right) angles to show the model how to correct steering back to center. Then I used the horizontal shfiting to capture more angles. This was enough to get a stable model working on the fastest setting (means lowest resolution) on both tracks.
 
 Reducing input image size was the next challenge. We do this by first cropping the top and bottom from the image that would be noise to the model. Then we resize the image to (64,64) and convert to HSV and only returning the S channel. This takes us from (160,320,3) to (64, 64, 1)!!
 
 ### Before Cropping and Resizing.
 <div align="left">
   <br>
-  <img src="./crop1.png"><br><br>
+  <img src="./images/crop1.png"><br><br>
 </div>
 
 ### After Cropping and Resizing.
 <div align="left">
   <br>
-  <img src="./crop2.png"><br><br>
+  <img src="./images/crop2.png"><br><br>
 </div>
 
 
@@ -155,35 +155,35 @@ Reducing input image size was the next challenge. We do this by first cropping t
 * Batch size: 128 (tried 64, 128, 256, 1024)
 * Adam optimizer
 
-I used keras to do a validation split on 30% of the data and my custom early termination to stop the training when we we reach a validation loss of around 0.03! 
+I used keras to do a validation split on 30% of the data and my custom early termination to stop the training when we we reach a validation loss of around 0.03!
 
 This model was tiny (52 params!) and we are training it on a 2012 macbook air.
 ** Note: this is from a previous run without early termination **
 
 <div align="left">
   </br>
-  <img src="./loss_plot.png"><br><br>
+  <img src="./images/loss_plot.png"><br><br>
 </div>
 
 <div align="left">
   <br>
-  <img src="./callback.png"><br><br>
+  <img src="./images/callback.png"><br><br>
 </div>
 <div align="left">
-  <img src="./train.png"><br><br>
+  <img src="./images/train.png"><br><br>
 </div>
 
 # Pros
 1. Can training on my macbook air.
 2. Enough to pass the challenge.
-3. Smaller model meant I could experiment with more variables and different models to gain better intuition. 
+3. Smaller model meant I could experiment with more variables and different models to gain better intuition.
 4. Learned that our current method of training with back prop is not efficient and that we can achieve alot with smaller network.
 5. Get to use aggressive learning rate for faster convergence :D
 
 # Cons
 1. Can not handle highest resolution setting.
-2. Can not go over .22 throttle and still be stable. 
-3. As the network increases in size, hard to understand why the decisions are being made. I can see this being a ** huge** problem for legal reasons. The end-to-end neural network faction is not looking so good here! 
+2. Can not go over .22 throttle and still be stable.
+3. As the network increases in size, hard to understand why the decisions are being made. I can see this being a ** huge** problem for legal reasons. The end-to-end neural network faction is not looking so good here!
 
 
 > This bring me to the other rule of thumb, ** every problem will have tradeoffs **. The question becomes what are the tradeoffs you are willing to make? This will depend on the business case you are solving!
