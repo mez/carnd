@@ -112,7 +112,7 @@ I started with a modified comma.ai model and I had a successful model, but it ne
   <img src="./images/fire_module.png"><br><br>
 </div>
 
-The fire module is the workhorse of squeezenet. Sqeezenet as described in the paper is around 700k trainable parameters. I went through a process, where I kept reducing the number of parameters while all other variables were kept constant. You get the theme here? We are at the frontier and this calls for empirical testing. Through some experiments I went from 10k parameters to 1005, then 329, then 159, then ** 63 ** and finally ** 52 **!!
+The fire module is the workhorse of squeezenet. Sqeezenet as described in the paper is around 700k trainable parameters. I went through a process, where I kept reducing the number of parameters while all other variables were kept constant. You get the theme here? We are at the frontier and this calls for empirical testing. Through some experiments I went from 10k parameters to 1005, then 329, then 159, then **63** and finally **52**!!
 
 ## The final 52 parameter squeezenet variant Model!!
 
@@ -123,7 +123,7 @@ The fire module is the workhorse of squeezenet. Sqeezenet as described in the pa
 
 This model combats overfitting by being super tiny and for kicks I added a small dropout layer. The model works on both tracks and has a six second epoch on my late 2012 Macbook air!! From the comma.ai model, it was evident that a validation loss of around 0.03 on 30% of **this** dataset results in a stable model that can handle the track at a throttle of around 0.2, which is a speed of around 20mph in the simulator. So, I didn't bother worrying about the epoch hyperparameter. I simply created a custom early termination Keras callback that stopped the training when we hit our requirement.
 
->One good rule of thumb I developed from this project is ** to try and reduce the number of variables you are tuning to gain better results faster.**
+>One good rule of thumb I developed from this project is **to try and reduce the number of variables you are tuning to gain better results faster.**
 
 # Training Strategy
 
@@ -158,7 +158,7 @@ Reducing input image size was the next challenge. We do this by first cropping t
 I used Keras to do a validation split on 30% of the data and my custom early termination to stop the training when we we reach a validation loss of around 0.03!
 
 This model was tiny (52 params!) and we are training it on a 2012 Macbook air.
-** Note: this is from a previous run without early termination **
+**Note: this is from a previous run without early termination**
 
 <div align="left">
   </br>
@@ -183,10 +183,10 @@ This model was tiny (52 params!) and we are training it on a 2012 Macbook air.
 # Cons
 1. Can not handle highest resolution setting.
 2. Can not go over .22 throttle and still be stable.
-3. As the network increases in size, hard to understand why the decisions are being made. I can see this being a ** huge** problem for legal reasons. The end-to-end neural network faction is not looking so good here!
+3. As the network increases in size, hard to understand why the decisions are being made. I can see this being a **huge** problem for legal reasons. The end-to-end neural network faction is not looking so good here!
 
 
-> This bring me to the other rule of thumb, ** every problem will have tradeoffs **. The question becomes what are the tradeoffs you are willing to make? This will depend on the business case you are solving!
+> This bring me to the other rule of thumb, **every problem will have tradeoffs**. The question becomes what are the tradeoffs you are willing to make? This will depend on the business case you are solving!
 
 # Files Submitted
 
