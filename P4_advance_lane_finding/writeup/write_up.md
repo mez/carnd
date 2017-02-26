@@ -1,7 +1,7 @@
 
 # Advanced Lane Finding Project
 
-The latest lane finding techniques are most likely using a combination of traditional and deep learning computer vision tactics and probably have multi redundant systems. In this project, we will explore and understand traditional computer vision methods.
+The latest lane finding techniques are most likely using a combination of traditional and deep learning computer vision tactics; also probably have multi redundant systems. In this project, we will explore and understand traditional computer vision methods.
 
 ### The goals / steps of this project are the following:
 
@@ -118,7 +118,7 @@ offset = (midpoint - middle_of_lane) * xm_per_pix
 
 ### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-[image6]: final_pipeline.png "Output"
+[image6]: final_pipeline.png "Final Output"
 ![alt text][image6]
 
 ---
