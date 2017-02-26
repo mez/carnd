@@ -91,7 +91,7 @@ I only use the sliding window technique the first frame using the `sliding_windo
 
 The code for this is located in the `main.py` file in the `pipeline()` method located in lines 184-194 and 217.
 
-First, adjust the points of the found lane lines to account for meters per pixel in both X and Y. Next I take those adjusted points and fit a polynomial with `np.polyfit()`.
+First, I adjust the points of the found lane lines to account for meters per pixel for both X and Y. Next, I take those adjusted points and fit a polynomial with `np.polyfit()`. Finally I use the radius of curvature equation described in the lectures.
 Snippet of the code is below:
 
 ```
@@ -103,6 +103,8 @@ right_fit_cr = np.polyfit(righty*ym_per_pix, rightx*xm_per_pix, deg=2)
 y_eval = np.max(ploty)  # Where radius of curvature is measured
 left_curverad = ((1 +(2*left_fit_cr[0]*y_eval*ym_per_pix + left_fit_cr[1])**2)**1.5) / np.absolute(2*left_fit_cr[0])
 right_curverad=((1 +(2*right_fit_cr[0]*y_eval*ym_per_pix + right_fit_cr[1])**2)**1.5) /np.absolute(2*right_fit_cr[0])
+
+radius = np.mean([left_curverad, right_curverad])
 
 ```
 
