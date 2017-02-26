@@ -136,5 +136,5 @@ This pipeline does not work well on the challenge videos.
 
 In my pipeline I probably could of first ran the warp to remove the lines that are not the lane lines so we don't waste compute on this with the thresholding. To make it more robust, I would of added redunant methods of detecting the lines and explore more color spaces to handle different lighting conditions etc. Also, I am not sure how this pipeline would handle night time or different weather patterns. 
 
-Overall, after I understood the general idea, most of the time was spent tweaking many nobs (boring). This quickly became time consuming! I wish we could of had additional data like GPS and other sensors, so that we could use deep learning with something like particle filters to try and detect lane lines!
+Overall, after I understood the general idea, most of the time was spent tweaking many nobs (boring). This quickly became time consuming! I wish we could of had additional data like GPS and other sensors, so that we could use deep learning with something like particle filters to try and detect lane lines/localization!
 
