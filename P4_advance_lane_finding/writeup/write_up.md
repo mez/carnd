@@ -1,7 +1,7 @@
 
 # Advanced Lane Finding Project
 
-The latest lane finding techniques are most likely using a combination of traditional and deep learning computer vision tactics and probably have multi redundant systems. In this project, we will explore and understand traditional computer vision methods. 
+The latest lane finding techniques are most likely using a combination of traditional and deep learning computer vision tactics and probably have multi redundant systems. In this project, we will explore and understand traditional computer vision methods.
 
 ### The goals / steps of this project are the following:
 
@@ -26,7 +26,7 @@ First, I create `objpoints`, which are the (x, y, z) coordinates of the chessboa
 
 I used `cv2.findChessboardCorners()` method to populate the `imgpoints` list with the corners of each successful chessboard detection.
 
-I then used the output `objpoints` and `imgpoints` to compute the camera matrix and distortion coefficients using the `cv2.calibrateCamera()` method. I used the camera matrix and distortion coefficients to the test image using the `cv2.undistort()` method and obtained this result: 
+I then used the output `objpoints` and `imgpoints` to compute the camera matrix and distortion coefficients using the `cv2.calibrateCamera()` method. I used the camera matrix and distortion coefficients to the test image using the `cv2.undistort()` method and obtained this result:
 
 [image1]: undistored_calibration_5.png "Undistorted"
 ![alt text][image1]
@@ -91,7 +91,8 @@ I only use the sliding window technique the first frame using the `sliding_windo
 
 The code for this is located in the `main.py` file in the `pipeline()` method located in lines 184-194 and 217.
 
-First, adjust the points found by the lane finding algorithm to account for meters per pixel in both X and Y, then fit those points to another polynomial with `np.polyfit()`. The rest of the calculations are just like the lecture. Snippet of the code is below:
+First, adjust the points of the found lane lines to account for meters per pixel in both X and Y. Next I take those adjusted points and fit a polynomial with `np.polyfit()`.
+Snippet of the code is below:
 
 ```
 # Fit new polynomials to x,y in world space
@@ -132,9 +133,8 @@ offset = (midpoint - middle_of_lane) * xm_per_pix
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-This pipeline does not work well on the challenge videos. 
+This pipeline does not work well on the challenge videos.
 
-In my pipeline I probably could of first ran the warp to remove the lines that are not the lane lines so we don't waste compute on this with the thresholding. To make it more robust, I would of added redunant methods of detecting the lines and explore more color spaces to handle different lighting conditions etc. Also, I am not sure how this pipeline would handle night time or different weather patterns. 
+In my pipeline I probably could of first ran the warp to remove the lines that are not the lane lines so we don't waste compute on this with the thresholding. To make it more robust, I would of added redunant methods of detecting the lines and explore more color spaces to handle different lighting conditions etc. Also, I am not sure how this pipeline would handle night time or different weather patterns.
 
 Overall, after I understood the general idea, most of the time was spent tweaking many nobs (boring). This quickly became time consuming! I wish we could of had additional data like GPS and other sensors, so that we could use deep learning with something like particle filters to try and detect lane lines/localization!
-
